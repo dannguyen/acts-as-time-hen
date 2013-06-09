@@ -1,6 +1,8 @@
 module TimeHen
    class TimeFact
 
+      NON_FOO_AGGREGATIONS = [:count]
+
       def initialize(owner, collection_name, aggregation, collection_foo, timestamp_attr, time_chunk)
          @owner_class = owner 
          @collection_name = collection_name
@@ -12,8 +14,15 @@ module TimeHen
 
 
       def name
-         "#{@aggregation}_of_#{@collection_foo}_for_#{@collection_name}_in_#{@time_chunk}".to_sym 
+         if simple_aggregation?
+            "#{@aggregation}_of_#{@collection_name}_in_#{@time_chunk}"
+         else
+            "#{@aggregation}_of_#{@collection_foo}_for_#{@collection_name}_in_#{@time_chunk}" 
+         end
+      end
 
+      def simple_aggregation?
+         NON_FOO_AGGREGATIONS.include?(@aggregation)
       end
 
       # command: modifies the @owner_class to have a new fact
@@ -62,7 +71,44 @@ module TimeHen
       end
 
       def calculate_aggregated_scope(a_scope)
-         a_scope.send( @aggregation, @collection_foo)                
+
+         # TK Smell, this should be different objects, not a switch
+         case @aggregation
+         when :sum
+            a_scope.send( @aggregation, @collection_foo)   
+         when :count 
+            a_scope.size 
+         when :collection        
+            # expects a collection, either Hash {a: 3, b: 5} 
+            #  or an Array, or a single value
+            # returns a Hash
+            
+            array_of_collections = a_scope.all.collect{|o| o.send(@collection_foo)}         
+            aggregated_hash = Hash.new{|h,k| h[k] = 0}
+
+            reduce_foo = case array_of_collections.first.class
+            when Hash 
+               ->(o_hsh, val){ o_hsh[val[0]] += val[1] }
+            when Array 
+               ->(o_hsh, val){ o_hsh[val] += 1}
+            else
+               nil
+            end
+
+            array_of_collections.each do |obj| 
+               if reduce_foo
+               # obj is a collectino
+                  obj.each do |x|
+                     reduce_foo(aggregated_hash, x)  # this modifies aggregated_hash 
+                  end
+               else 
+                  # simple values
+                  aggregated_hash[obj] += 1
+               end
+            end
+
+            return aggregated_hash
+         end             
       end
 
 

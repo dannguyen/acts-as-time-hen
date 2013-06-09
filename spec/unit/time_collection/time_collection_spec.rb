@@ -53,13 +53,14 @@ describe TimeCollection do
             expect(@time_collection.time_chunks).to eq [:day, :month, :year]
          end
       end
+
+      
    end
 
 
    context 'class modification' do 
       before(:each) do 
          class SpecPerson; end
-
          SpecPerson.send :include, TimeHen::Base
          @time_collection = TimeCollection.new( @time_coll_params.merge owner: SpecPerson)
       end  
@@ -67,7 +68,8 @@ describe TimeCollection do
       it 'should have an :owner' do  
          expect(@time_collection.owner).to eq SpecPerson
       end
-      
+
+
    end
 
 end

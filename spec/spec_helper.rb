@@ -14,7 +14,6 @@ RSpec.configure do |config|
   config.formatter = :documentation # :progress, :html, :textmate
   config.fail_fast = true
 
-
   config.before(:each) do
     DatabaseCleaner.start
   end

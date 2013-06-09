@@ -1,6 +1,7 @@
 module TimeHen
    class TimeCollection
 
+      DEFAULT_FACT_AGGREGATIONS = [:count]
       attr_reader :collection_name, :collection_timestamp_attr, :fact_names,
          :time_chunk_max, :time_chunk_min, :time_chunks, :owner 
 
@@ -13,8 +14,19 @@ module TimeHen
          @facts = []
          
          params[:fact_names].each do |arr|
-            @fact_names << arr if arr.is_a?(Array)
+            if arr.is_a?(Array)
+               @fact_names << arr 
+
+               ## add default fact aggregations
+               DEFAULT_FACT_AGGREGATIONS.each do |dfname|
+                  @fact_names << [arr[0], dfname]
+               end
+            end
          end
+
+
+
+
 
          opts = params[:fact_options]
 
@@ -52,6 +64,7 @@ module TimeHen
                         )
 
                fact.define!
+               puts fact.name 
                @facts << fact 
             end 
          end
@@ -59,6 +72,8 @@ module TimeHen
          nil
       end
             
+      private
+
 
 
    end

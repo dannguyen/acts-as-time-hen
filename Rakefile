@@ -11,6 +11,7 @@ task :default => :rspec
 desc 'Run the specs'
 RSpec::Core::RakeTask.new(:rspec) do |t|
   t.rspec_opts = ['--color']
+  t.ruby_opts = ['-W0']
   t.pattern = './spec/**/*_spec.rb'
 end
 
