@@ -216,7 +216,13 @@ tweets.tm_rate
       num_value: 0
       hash_value: {value: [google.com, yahoo.com, twitter.com]}
       
-      
+ 
+### List of monthly sums of tweet word count for the year 2008 for the user Ev Williams
+
+   # TK TK t
+   User.find('ev').sum_of_word_count_for_tweets_in_year("2008").by_month.
+
+
 ### Average cussword per tweets by Dan Nguyen in 2009
 
    t = User.find('dancow').tweets.cusswords
