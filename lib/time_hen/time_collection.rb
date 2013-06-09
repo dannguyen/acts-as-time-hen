@@ -39,7 +39,7 @@ module TimeHen
       def set_time_facts!
 
          @fact_names.each do |arr|
-            fact_agg, fact_foo = arr 
+            fact_foo, fact_agg = arr 
 
             @time_chunks.each do |chunk|
                fact = TimeFact.new(

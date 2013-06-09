@@ -30,6 +30,7 @@ include TimeHen
 
 class Author < ActiveRecord::Base
    has_many :books
+   include TimeHen::Base
 end
 
 class Book < ActiveRecord::Base

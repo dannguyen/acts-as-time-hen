@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TimeHen::Base, skip: true  do
+describe TimeHen::Base, skip: false  do
 
       before(:each) do 
          BaseAuthor = Author.dup
@@ -31,7 +31,7 @@ describe TimeHen::Base, skip: true  do
 
 
 
-   context "specifying a time collection", skip: true do
+   context "specifying a time collection" do
 
       before(:each) do 
          @time_col_hsh = {
@@ -42,9 +42,7 @@ describe TimeHen::Base, skip: true  do
                              time_chunk_max: :year}
             }
 
-         class Author 
-            set_time_collection( @time_col_hsh)
-         end                  
+         Author.set_time_collection( @time_col_hsh )
 
          @author = Author.create
          @author.books << Book.create( title: "A", word_count: 50, published_at: "2012-01-01")
@@ -65,7 +63,7 @@ describe TimeHen::Base, skip: true  do
          end
       end
 
-      context 'auto-generated #count methods provided by default' do 
+      context 'auto-generated #count methods provided by default', skip: true do 
          describe '#count_for_books_in_TIME' do 
             it '#in_year' do 
                expect( @author.sum_of_count_for_books_in_year("2012") ).to eq 2

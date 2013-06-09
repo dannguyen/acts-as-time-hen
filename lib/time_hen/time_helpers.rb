@@ -49,19 +49,13 @@ module TimeHen
          when :year
             DateTime.new(timeparts[0] + 1)
          when :month 
-            puts "hey"
             t1 >> 1
          when :day 
             t1 + 1 
          when :hour 
             t1 + 1/60.0
          end
-#         Time.new(*timeparts.tap{|t| t[-1] = time_place_increment.call(t[-1]) })
 
-         puts time_chunk_sym
-         puts t1.strftime "%Y %m %d"
-         puts t2.strftime "%Y %m %d"
-         
          return t1...t2
       end
 
