@@ -63,6 +63,8 @@ describe TimeHen::Base, skip: false  do
          end
       end
 
+
+
       context 'auto-generated #count methods provided by default', skip: true do 
          describe '#count_for_books_in_TIME' do 
             it '#in_year' do 
